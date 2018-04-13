@@ -7,10 +7,6 @@ import pandas as pd
 from collections import OrderedDict
 from datetime import date
 
-@route('/')
-def app():
-    return "Hello World!"
-
 @get('/predict')
 def predict():
     data = request.query.decode()
@@ -18,7 +14,6 @@ def predict():
     print(preparedData)
     # clf = load_model()
     # clf.predict()
-
     response.headers['Content-Type'] = 'application/json'
     return json.dumps({'prediction': 82})
 
@@ -30,16 +25,17 @@ def loadModel():
     # return clf
 
 def prepareData(data):
-    df = pd.DataFrame([{
-        'pclass': data['pclass'],
+    dict = OrderedDict({
+        'pclass': int(data['pclass']),
         'sex': data['sex'],
-        'age': data['age'],
-        'sibsp': data['sibsp'],
-        'parch': data['parch'],
-        'fare': data['fare'],
-        'embarked': data['embarked']
-    }])
+        'age': int(data['age']),
+        'sibsp': 0,
+        'parch': 0,
+        'fare': fare(data['fare']),
+        'embarked': 'C'
+    })
 
+    df = pd.DataFrame([dict])
     preparedDf = preprocessDf(df)
     return preparedDf
 
@@ -50,4 +46,9 @@ def preprocessDf(df):
     processed_df.embarked = le.fit_transform(processed_df.embarked)
     return processed_df.values
 
-run(host='localhost', port=8080, debug=True)
+def fare(currentPrice):
+    INFLATION_MULTIPLIER = 23.45
+    originalPrice = float(currentPrice) / INFLATION_MULTIPLIER
+    return round(originalPrice, 2)
+
+run(host='localhost', port=8080, debug=True, reloader=True)
