@@ -1,28 +1,25 @@
-from bottle import request, response, route, run, get
+from bottle import request, response, run, get
+from sklearn import preprocessing
+from collections import OrderedDict
+import pandas as pd
 import pickle
 import json
-from sklearn import datasets, preprocessing
-import sklearn.ensemble as ske
-import pandas as pd
-from collections import OrderedDict
-from datetime import date
 
 @get('/predict')
 def predict():
     data = request.query.decode()
     preparedData = prepareData(data)
-    print(preparedData)
-    # clf = load_model()
-    # clf.predict()
+    clf = loadModel()
+    result = predictProbability(preparedData, clf)
+
     response.headers['Content-Type'] = 'application/json'
-    return json.dumps({'prediction': 82})
+    return json.dumps({'prediction': result})
 
 def loadModel():
-    return
-    # model = open('file', 'r')
-    # clf = pickle.loads(model)
-    # model.close()
-    # return clf
+    model = open('titanic_model.sav', 'rb')
+    clf = pickle.load(model)
+    model.close()
+    return clf
 
 def prepareData(data):
     dict = OrderedDict({
@@ -41,10 +38,14 @@ def prepareData(data):
 
 def preprocessDf(df):
     processed_df = df.copy()
-    le = preprocessing.LabelEncoder()
-    processed_df.sex = le.fit_transform(processed_df.sex)
+    le = preprocessing.LabelEncoder().fit(['m', 'f'])
+    processed_df.sex = le.transform(processed_df.sex)
     processed_df.embarked = le.fit_transform(processed_df.embarked)
     return processed_df.values
+
+def predictProbability(data, model):
+    probability = model.predict_proba(data)
+    return round(probability[0][1]*100, 2)
 
 def fare(currentPrice):
     INFLATION_MULTIPLIER = 23.45
