@@ -11,6 +11,6 @@ http://localhost:8080/predict?pclass={CLASS[1,2,3]}&sex={SEX[m,f]}&age={AGE}&far
 ```
 
 ### Classes/Prices
-1st Class Fare - 3500 USD
-2nd Class Fare - 1375 USD
-3rd Class Fare - 500 USD
+- 1st Class Fare - 3500 USD
+- 2nd Class Fare - 1375 USD
+- 3rd Class Fare - 500 USD
