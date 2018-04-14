@@ -2,7 +2,7 @@
 
 ### Run Server
 ```
-python3 app.js
+python3 app.py
 ```
 
 ### Endpoint
