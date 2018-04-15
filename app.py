@@ -1,4 +1,4 @@
-from bottle import request, response, run, get
+from bottle import request, response, run, get, template
 from sklearn import preprocessing
 from collections import OrderedDict
 import pandas as pd
@@ -12,8 +12,7 @@ def predict():
     clf = loadModel()
     result = predictProbability(preparedData, clf)
 
-    response.headers['Content-Type'] = 'application/json'
-    return json.dumps({'prediction': result})
+    return template('prediction', result=result)
 
 def loadModel():
     model = open('titanic_model.sav', 'rb')
@@ -23,7 +22,7 @@ def loadModel():
 
 def prepareData(data):
     dict = OrderedDict({
-        'pclass': int(data['pclass']),
+        'pclass': pclass(data['fare']),
         'sex': data['sex'],
         'age': int(data['age']),
         'sibsp': 0,
@@ -51,5 +50,14 @@ def fare(currentPrice):
     INFLATION_MULTIPLIER = 23.45
     originalPrice = float(currentPrice) / INFLATION_MULTIPLIER
     return round(originalPrice, 2)
+
+def pclass(fare):
+    fare = int(fare)
+    if fare < 500:
+        return 3
+    elif fare < 1375:
+        return 2
+    else:
+        return 1
 
 run(host='localhost', port=8080, debug=True, reloader=True)
