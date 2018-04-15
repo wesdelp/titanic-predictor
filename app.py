@@ -5,6 +5,11 @@ import pandas as pd
 import pickle
 import json
 
+@get('/_ping')
+def ping():
+    response.headers['Content-Type'] = 'application/json'
+    return json.dumps({'ok': 'true'})
+
 @get('/predict')
 def predict():
     data = request.query.decode()
@@ -60,4 +65,4 @@ def pclass(fare):
     else:
         return 1
 
-run(host='localhost', port=8080, debug=True, reloader=True)
+run(host='0.0.0.0', port=3000, debug=True, reloader=True)
