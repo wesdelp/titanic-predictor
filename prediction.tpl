@@ -91,7 +91,7 @@
       <h1>Looking good! {{result}}% chance of survival! :)</h1>
       <img src="https://media.giphy.com/media/3o6EhZHDSQe9Bi4LYs/giphy.gif"></img>
     %end
-    <form id='predict-form' action="http://localhost:8080/predict" action="get">
+    <form id='predict-form' action="http://localhost:3000/predict" action="get">
       <header><legend>Try Again?</legend></header>
       <fieldset>
         <div class="block">
