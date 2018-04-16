@@ -4,6 +4,7 @@ from collections import OrderedDict
 import pandas as pd
 import pickle
 import json
+import copy
 
 @get('/_ping')
 def ping():
@@ -36,13 +37,15 @@ def prepareParams(data):
         'age': int(p_age),
         'sibsp': 0,
         'parch': 0,
-        'fare': fare(p_fare),
+        'fare': int(p_fare),
         'embarked': 'C'
     })
     return dict
 
 def prepareData(data):
-    df = pd.DataFrame([data])
+    prep_data = copy.deepcopy(data)
+    prep_data['fare'] = fare(prep_data['fare'])
+    df = pd.DataFrame([prep_data])
     preparedDf = preprocessDf(df)
     return preparedDf
 
