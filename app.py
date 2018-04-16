@@ -13,11 +13,12 @@ def ping():
 @get('/predict')
 def predict():
     data = request.query.decode()
-    preparedData = prepareData(data)
+    params = prepareParams(data)
+    preparedData = prepareData(params)
     clf = loadModel()
     result = predictProbability(preparedData, clf)
 
-    return template('prediction', result=result)
+    return template('prediction', result=result, params=params)
 
 def loadModel():
     model = open('titanic_model.sav', 'rb')
@@ -25,18 +26,23 @@ def loadModel():
     model.close()
     return clf
 
-def prepareData(data):
+def prepareParams(data):
+    p_fare = data.get('fare', 0)
+    p_sex = data.get('sex', 'm')
+    p_age = data.get('age', 0)
     dict = OrderedDict({
-        'pclass': pclass(data['fare']),
-        'sex': data['sex'],
-        'age': int(data['age']),
+        'pclass': pclass(p_fare),
+        'sex': p_sex,
+        'age': int(p_age),
         'sibsp': 0,
         'parch': 0,
-        'fare': fare(data['fare']),
+        'fare': fare(p_fare),
         'embarked': 'C'
     })
+    return dict
 
-    df = pd.DataFrame([dict])
+def prepareData(data):
+    df = pd.DataFrame([data])
     preparedDf = preprocessDf(df)
     return preparedDf
 
