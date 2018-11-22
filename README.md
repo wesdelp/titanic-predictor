@@ -12,8 +12,8 @@ http://localhost:3000/predict?&sex={SEX[m,f]}&age={AGE}&fare={FARE}
 
 ## Docker
 ```
-sudo docker build -t app .
-sudo docker run -it -d -p 3000:3000 --rm --name app app
+docker build -t predict .
+docker run -it -p 3000:3000 --rm --name predict predict
 ```
 
 ### Classes/Prices
