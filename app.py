@@ -1,10 +1,14 @@
-from bottle import request, response, run, get, template
+from bottle import redirect, request, response, run, get, template
 from sklearn import preprocessing
 from collections import OrderedDict
 import pandas as pd
 import pickle
 import json
 import copy
+
+@get('/')
+def home():
+    redirect("/predict")
 
 @get('/_ping')
 def ping():
