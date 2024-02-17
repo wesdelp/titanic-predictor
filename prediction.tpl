@@ -324,7 +324,7 @@
         <img src="https://media.giphy.com/media/3o6EhZHDSQe9Bi4LYs/giphy.gif"></img>
       %end
     %end
-    <form id='predict-form' action="http://localhost:3000/predict" action="get">
+    <form id='predict-form' action="/predict" action="get">
     <header><legend>{{form_name}}</legend></header>
       <fieldset>
         <div class="block">
